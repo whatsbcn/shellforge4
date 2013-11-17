@@ -1,0 +1,7 @@
+#define SF_BIGENDIAN
+
+[INCLUDES]
+
+[SFLIB]	
+	
+

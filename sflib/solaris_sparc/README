@@ -1,0 +1,141 @@
+Je te met en piece jointe ce que j'ai trouvé dans les include. Il
+n'y a pas de macro _syscall. Mais comme j'ai déjà écrit un truc dans
+le genre, voici un extrait de "mon" code (en fait celui de la glibc
+linux sparc quelque peu modifié pour solaris), à toutes fins utiles :
+
+-----------------------------------------------------------------------
+/* Following code was based on Linux glibc and modified to fit our needs
+for Solaris */
+/* TODO : do not loose errno, put it in a global variable */
+
+#define __SYSCALL_STRING                                               
+#\
+        "ta 8\n"      /* linux was: ta 0x10 */                       \
+        "bcc 1f\n"    /* bcc 1: */                                      \
+        "  nop\n"     /* delay slot... not sure it is necessary, could do bcc,a
+*/      \
+        "  or %%g0, -1, %%o0\n"  /* set return value to -1 instead of
+errno (which is >0 unlike linux, btw) */ \
+        "1:"
+
+#define __SYSCALL_CLOBBERS "g2", "g3", "g4", "g5", "g7",               
+#\
+        "f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7",               \
+        "f8", "f9", "f10", "f11", "f12", "f13", "f14", "f15",         \
+        "f16", "f17", "f18", "f19", "f20", "f21", "f22", "f23",       \
+        "f24", "f25", "f26", "f27", "f28", "f29", "f30", "f31",       \
+        "cc", "memory"
+
+/* Define a macro which expands inline into the wrapper code for a
+system call.  */
+
+#define INLINE_SYSCALL(name, nr, args...) inline_syscall##nr(name, args)
+
+#define inline_syscall0(name,dummy...)                                 
+#\
+({                                                                   \
+        register long __o0 __asm__ ("o0");                            \
+        register long __g1 __asm__ ("g1") = SYS_##name;              \
+        __asm__ (__SYSCALL_STRING : "=r" (__g1), "=r" (__o0) :     \
+                 "0" (__g1) :                                        \
+                 __SYSCALL_CLOBBERS);             \
+        __o0;                                                           \
+})
+
+#define inline_syscall1(name,arg1)                                     
+#\
+({                                                                   \
+        register long __o0 __asm__ ("o0") = (long)(arg1);             \
+        register long __g1 __asm__ ("g1") = SYS_##name;              \
+        __asm__ (__SYSCALL_STRING : "=r" (__g1), "=r" (__o0) :       \
+                 "0" (__g1), "1" (__o0) :                             \
+                 __SYSCALL_CLOBBERS);                                 \
+        __o0;                                                         \
+})
+
+#define inline_syscall2(name,arg1,arg2)                                
+#\
+({                                                                    \
+        register long __o0 __asm__ ("o0") = (long)(arg1);             \
+        register long __o1 __asm__ ("o1") = (long)(arg2);             \
+        register long __g1 __asm__ ("g1") = SYS_##name;               \
+        __asm__ (__SYSCALL_STRING : "=r" (__g1), "=r" (__o0) :        \
+                 "0" (__g1), "1" (__o0), "r" (__o1) :                 \
+                 __SYSCALL_CLOBBERS);                                 \
+        __o0;                                                        \
+})
+
+
+#define inline_syscall3(name,arg1,arg2,arg3)                           
+#\
+({                                                                    \
+        register long __o0 __asm__ ("o0") = (long)(arg1);             \
+        register long __o1 __asm__ ("o1") = (long)(arg2);             \
+        register long __o2 __asm__ ("o2") = (long)(arg3);             \
+        register long __g1 __asm__ ("g1") = SYS_##name;               \
+        __asm__ (__SYSCALL_STRING : "=r" (__g1), "=r" (__o0) :        \
+                 "0" (__g1), "1" (__o0), "r" (__o1), "r" (__o2) :     \
+                 __SYSCALL_CLOBBERS);                                 \
+        __o0;                                                         \
+})
+
+#define inline_syscall4(name,arg1,arg2,arg3,arg4)                      
+#\
+({                                                                    \
+        register long __o0 __asm__ ("o0") = (long)(arg1);             \
+        register long __o1 __asm__ ("o1") = (long)(arg2);             \
+        register long __o2 __asm__ ("o2") = (long)(arg3);             \
+        register long __o3 __asm__ ("o3") = (long)(arg4);             \
+        register long __g1 __asm__ ("g1") = SYS_##name;               \
+        __asm__ (__SYSCALL_STRING : "=r" (__g1), "=r" (__o0) :        \
+                 "0" (__g1), "1" (__o0), "r" (__o1), "r" (__o2),      \
+                 "r" (__o3) :                                         \
+                 __SYSCALL_CLOBBERS);                                 \
+        __o0;                                                         \
+})
+
+#define inline_syscall5(name,arg1,arg2,arg3,arg4,arg5)                 
+#\
+({                                                                    \
+        register long __o0 __asm__ ("o0") = (long)(arg1);             \
+        register long __o1 __asm__ ("o1") = (long)(arg2);             \
+        register long __o2 __asm__ ("o2") = (long)(arg3);             \
+        register long __o3 __asm__ ("o3") = (long)(arg4);             \
+        register long __o4 __asm__ ("o4") = (long)(arg5);             \
+        register long __g1 __asm__ ("g1") = SYS_##name;               \
+        __asm__ (__SYSCALL_STRING : "=r" (__g1), "=r" (__o0) :        \
+                 "0" (__g1), "1" (__o0), "r" (__o1), "r" (__o2),      \
+                 "r" (__o3), "r" (__o4) :                             \
+                 __SYSCALL_CLOBBERS);                                 \
+        __o0;                                                         \
+})
+
+#define inline_syscall6(name,arg1,arg2,arg3,arg4,arg5,arg6)            
+#\
+({                                                                    \
+        register long __o0 __asm__ ("o0") = (long)(arg1);             \
+        register long __o1 __asm__ ("o1") = (long)(arg2);             \
+        register long __o2 __asm__ ("o2") = (long)(arg3);             \
+        register long __o3 __asm__ ("o3") = (long)(arg4);             \
+        register long __o4 __asm__ ("o4") = (long)(arg5);             \
+        register long __o5 __asm__ ("o5") = (long)(arg6);             \
+        register long __g1 __asm__ ("g1") = SYS_##name;               \
+        __asm__ (__SYSCALL_STRING : "=r" (__g1), "=r" (__o0) :        \
+                 "0" (__g1), "1" (__o0), "r" (__o1), "r" (__o2),      \
+                 "r" (__o3), "r" (__o4), "r" (__o5) :                 \
+                 __SYSCALL_CLOBBERS);                                 \
+        __o0;                                                         \
+})
+
+-----------------------------------------------------------------------
+
+Il y a quelques subtilités dans l'implémentation des fonctions de la
+library : tu remarqueras par exemple l'absence de syscall geteuid(), car
+il faut en fait appeler le syscall getuid() qui renvoie uid dans %o0 et
+euid dans %o1. Pour mmap, il faut transformer l'argument flags en
+flags|0x80000000 (ou un truc comme ça..) sinon le comportement
+du syscall n'est pas conforme à la man page. La bonne nouvelle
+c'est qu'il y a un syscall socketpair. Par contre waitpid doit être
+recodé dans la lib, ainsi que les fonctions ptrace().
+
+
