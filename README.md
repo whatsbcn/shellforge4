@@ -27,3 +27,7 @@ We can make a shellcode :
  \x53\xbb\x05\x00\x00\x00\xcd\x80\x5b\x8b\x75\xfc\xc9\xc3
 ```
 
+# How to install it
+```
+$ sh ./sflib/install.sh
+```
