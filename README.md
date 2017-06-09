@@ -31,5 +31,5 @@ We can make a shellcode :
 
 Shellforge needs sflib in order to work. You can install it by executing the installation script in sflib directory.
 ```
-$ sh ./sflib/install.sh
+$ sudo sh ./sflib/install.sh
 ```
