@@ -1,5 +1,7 @@
 /* 
  * ShellForge example: list a directory
+ * It uses the deprecated readdir syscall not supported by a lot of architectures.
+ * If you want more details you can check: https://github.com/whatsbcn/shellforge4/issues/5
  * $Id$
  */
 
