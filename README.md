@@ -34,3 +34,17 @@ Shellforge needs sflib in order to work. You can install it by executing the ins
 $ cd sflib
 $ sudo sh ./install.sh
 ```
+
+# How to use it
+
+Help
+$ cd shellforge
+$ ./sf.py -h
+
+Generate the shellcode 
+$ cd shellforge
+$ ./sf.py examples/hello.c 
+
+Generate the shellcode and test it
+$ cd shellforge
+$ ./sf.py -t examples/hello.c 
