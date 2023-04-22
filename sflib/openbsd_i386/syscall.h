@@ -34,7 +34,7 @@ __asm__ volatile ("pushl %2\n\t"     \
 		  "int   $0x80\n\t"  \
 		  "add   $8, %%esp"  \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1))); \
+	: "0" (__NR_##name),"r" ((long)(arg1))); \
 __sfsyscall_return(type,__res); \
 }
 
@@ -48,7 +48,7 @@ __asm__ volatile ("pushl %3\n\t"     \
 		  "int   $0x80\n\t"  \
 		  "add   $12, %%esp" \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"g" ((long)(arg2)) ); \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"r" ((long)(arg2)) ); \
 __sfsyscall_return(type,__res); \
 }
 
@@ -63,8 +63,8 @@ __asm__ volatile ("pushl %4\n\t"     \
 		  "int   $0x80\n\t"  \
 		  "add   $16, %%esp" \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"g" ((long)(arg2)), \
-		  "g" ((long)(arg3)) ); \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"r" ((long)(arg2)), \
+		  "r" ((long)(arg3)) ); \
 __sfsyscall_return(type,__res); \
 }
 
@@ -80,7 +80,7 @@ __asm__ volatile ("pushl %5\n\t"     \
 		  "int   $0x80\n\t"  \
 		  "add   $20, %%esp" \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"c" ((long)(arg2)), \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"c" ((long)(arg2)), \
 	  "d" ((long)(arg3)),"S" ((long)(arg4)) ); \
 __sfsyscall_return(type,__res); \
 } 
@@ -99,8 +99,8 @@ __asm__ volatile ("pushl %6\n\t"     \
 		  "int   $0x80\n\t"  \
 		  "add   $24, %%esp" \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"g" ((long)(arg2)), \
-	  "g" ((long)(arg3)),"g" ((long)(arg4)),"g" ((long)(arg5))); \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"r" ((long)(arg2)), \
+	  "r" ((long)(arg3)),"r" ((long)(arg4)),"r" ((long)(arg5))); \
 __sfsyscall_return(type,__res); \
 }
 
@@ -119,9 +119,9 @@ __asm__ volatile ("pushl %7\n\t"     \
 		  "int   $0x80\n\t"  \
 		  "add   $28, %%esp" \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"g" ((long)(arg2)), \
-	  "g" ((long)(arg3)),"g" ((long)(arg4)),"g" ((long)(arg5)), \
-	  "g" ((long)(arg6))); \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"r" ((long)(arg2)), \
+	  "r" ((long)(arg3)),"r" ((long)(arg4)),"r" ((long)(arg5)), \
+	  "r" ((long)(arg6))); \
 __sfsyscall_return(type,__res); \
 }
 
