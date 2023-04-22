@@ -47,7 +47,7 @@ __asm__ volatile ("###> " #name "(%2) <###\n\t"    \
 		  "int $0x80\n\t"       \
                   "popl %%ebx"          \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1))); \
+	: "0" (__NR_##name),"r" ((long)(arg1))); \
 __sfsyscall_return(type,__res); \
 }
 
@@ -61,7 +61,7 @@ __asm__ volatile ("###> " #name "(%2, %3) <###\n\t"    \
 		  "int $0x80\n\t"       \
                   "popl %%ebx"          \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"c" ((long)(arg2)) ); \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"c" ((long)(arg2)) ); \
 __sfsyscall_return(type,__res); \
 }
 
@@ -75,7 +75,7 @@ __asm__ volatile ("###> " #name "(%2, %3, %4) <###\n\t"    \
 		  "int $0x80\n\t"       \
                   "popl %%ebx"          \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"c" ((long)(arg2)), \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"c" ((long)(arg2)), \
 		  "d" ((long)(arg3)) ); \
 __sfsyscall_return(type,__res); \
 }
@@ -90,7 +90,7 @@ __asm__ volatile ("###> " #name "(%2, %3, %4, %5) <###\n\t"    \
 		  "int $0x80\n\t"       \
                   "popl %%ebx"          \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"c" ((long)(arg2)), \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"c" ((long)(arg2)), \
 	  "d" ((long)(arg3)),"S" ((long)(arg4)) ); \
 __sfsyscall_return(type,__res); \
 } 
@@ -106,7 +106,7 @@ __asm__ volatile ("###> " #name "(%2, %3, %4, %5, %6) <###\n\t"    \
 		  "int $0x80\n\t"       \
                   "popl %%ebx"          \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"c" ((long)(arg2)), \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"c" ((long)(arg2)), \
 	  "d" ((long)(arg3)),"S" ((long)(arg4)),"D" ((long)(arg5))); \
 __sfsyscall_return(type,__res); \
 }
@@ -125,9 +125,9 @@ __asm__ volatile ("##> " #name "(%2, %3, %4, %5, %6, %7) <###\n\t"    \
 		  "popl %%ebp\n\t"   \
                   "popl %%ebx"       \
 	: "=a" (__res) \
-	: "0" (__NR_##name),"g" ((long)(arg1)),"c" ((long)(arg2)), \
+	: "0" (__NR_##name),"r" ((long)(arg1)),"c" ((long)(arg2)), \
 	  "d" ((long)(arg3)),"S" ((long)(arg4)),"D" ((long)(arg5)), \
-	  "g" ((long)(arg6))); \
+	  "r" ((long)(arg6))); \
 __sfsyscall_return(type,__res); \
 }
 
@@ -149,9 +149,9 @@ __asm__ volatile ("pushl %%ebx\n\t"  \
                   "add $0x18,%%esp\n\t"  \
                   "popl %%ebx"   \
         : "=a" (__res) \
-        : "0" (__NR_##name),"g" ((long)(arg1)),"g" ((long)(arg2)), \
-          "g" ((long)(arg3)),"g" ((long)(arg4)),"g" ((long)(arg5)), \
-          "g" ((long)(arg6))); \
+        : "0" (__NR_##name),"r" ((long)(arg1)),"r" ((long)(arg2)), \
+          "r" ((long)(arg3)),"r" ((long)(arg4)),"r" ((long)(arg5)), \
+          "r" ((long)(arg6))); \
 __sfsyscall_return(type,__res); \
 }
 
